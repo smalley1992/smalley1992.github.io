@@ -98,21 +98,25 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background-color: #483D8B; /* Dark background for contrast */
+			background-color: #483D8B;
 			color: #F8F8FF;
-			border-top: 2px solid #E6E6FA; /* Slight highlight for separation */
+			border-top: 2px solid #E6E6FA;
+			z-index: 1000; /* Ensure it's above other content */
+			padding: 5px 0; /* Reduced padding */
+			text-align: center; /* Center align the content */
 		}
 
 		.referral-link a {
 			color: #FFF;
-			background-color: #FFA500; /* Bright, inviting color */
-			border-color: #FFA500; /* Ensure the border matches the button */
+			background-color: #FFA500;
+			border-color: #FFA500;
 			font-weight: bold;
-			padding: 10px 20px;
+			padding: 5px 15px; /* Adjusted padding for smaller size */
 			border-radius: 5px;
-			box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Soft shadow for depth */
-			text-decoration: none; /* Removes underline from the link */
-			transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+			box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+			text-decoration: none;
+			transition: background-color 0.3s, box-shadow 0.3s;
+			font-size: 0.8rem; /* Smaller font size for smaller screens */
 		}
 
 		.referral-link a:hover, .referral-link a:focus {
@@ -120,12 +124,41 @@
 			box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Enhanced shadow for pop effect */
 			text-decoration: none; /* Ensures no underline appears on hover */
 		}
+		.close-btn {
+			position: absolute;
+			top: 5px;
+			right: 10px;
+			border: none;
+			background: transparent;
+			color: #FFF;
+			font-size: 1.5rem;
+			cursor: pointer;
+		}
+		@media (max-width: 768px) {
+			.close-btn {
+				font-size: 1rem; /* Smaller font size for the close button on small screens */
+			}
+		}
         @media (min-width: 768px) {
             .container-fluid {
                 justify-content: center;
                 align-items: center;
             }
         }
+		@media (max-width: 768px) {
+			.referral-link {
+				position: relative; /* Change to relative for small screens */
+				width: 100%; /* Ensure it spans the full width */
+				bottom: auto; /* Remove fixed positioning at the bottom */
+				border-top: none; /* Remove border top */
+			}
+
+			.referral-link a {
+				display: inline-block; /* Adjust display for smaller button */
+				width: auto; /* Auto width based on content */
+				font-size: 0.7rem; /* Even smaller font size for very small screens */
+			}
+		}
     </style>
 </head>
 <body class="container-fluid py-5">
@@ -221,10 +254,12 @@
 		document.getElementById('datePicker').addEventListener('change', resetAutoCloseTimer);
 		document.getElementById('regionPicker').addEventListener('change', resetAutoCloseTimer);
 		document.querySelector('.btn-close').addEventListener('click', resetAutoCloseTimer);
-
+		
 		// Additionally, consider other interactions that should reset the timer
 		document.querySelector('.settings-panel').addEventListener('mousemove', resetAutoCloseTimer);
 		document.querySelector('.settings-panel').addEventListener('keypress', resetAutoCloseTimer);
+		
+		
 
 				
 		
@@ -330,6 +365,31 @@
 				resetAutoCloseTimer();
 			}
 		}
+		
+		document.addEventListener('DOMContentLoaded', function() {
+			// Check if the close button exists
+			var closeButton = document.querySelector('.close-btn');
+			if (closeButton) {
+				closeButton.addEventListener('click', function() {
+					// Hide the referral link container when the close button is clicked
+					var referralLinkContainer = document.querySelector('.referral-link');
+					if (referralLinkContainer) {
+						referralLinkContainer.style.display = 'none';
+					}
+				});
+			}
+			// Check if the close button exists
+			var closeButton = document.querySelector('.close-btn');
+			if (closeButton) {
+				closeButton.addEventListener('click', function() {
+					// Hide the referral link container when the close button is clicked
+					var referralLinkContainer = document.querySelector('.referral-link');
+					if (referralLinkContainer) {
+						referralLinkContainer.style.display = 'none';
+					}
+				});
+			}
+});
 
 		
 		window.onload = function() {
@@ -346,7 +406,8 @@
     };
     </script>
 	<div class="referral-link text-center py-4">
-    <a href="https://share.octopus.energy/teal-lion-434" class="btn btn-primary" target="_blank">Join Octopus Energy and Get £50 Credit!</a>
+		<button class="close-btn">&times;</button>
+		<a href="https://share.octopus.energy/teal-lion-434" class="btn btn-primary" target="_blank">Join Octopus Energy and Get £50 Credit!</a>
 </div>
 </body>
 </html>
