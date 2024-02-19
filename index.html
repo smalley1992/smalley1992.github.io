@@ -93,6 +93,33 @@
 		.header h1, .header h2 {
 			margin-bottom: 0.5rem; /* Reduce the space between title elements */
 		}
+		.referral-link {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #483D8B; /* Dark background for contrast */
+			color: #F8F8FF;
+			border-top: 2px solid #E6E6FA; /* Slight highlight for separation */
+		}
+
+		.referral-link a {
+			color: #FFF;
+			background-color: #FFA500; /* Bright, inviting color */
+			border-color: #FFA500; /* Ensure the border matches the button */
+			font-weight: bold;
+			padding: 10px 20px;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Soft shadow for depth */
+			text-decoration: none; /* Removes underline from the link */
+			transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+		}
+
+		.referral-link a:hover, .referral-link a:focus {
+			background-color: #FF8C00; /* Slightly darker shade on hover/focus */
+			box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Enhanced shadow for pop effect */
+			text-decoration: none; /* Ensures no underline appears on hover */
+		}
         @media (min-width: 768px) {
             .container-fluid {
                 justify-content: center;
@@ -318,5 +345,8 @@
         }, 3600000); // 3600000 milliseconds = 1 hour
     };
     </script>
+	<div class="referral-link text-center py-4">
+    <a href="https://share.octopus.energy/teal-lion-434" class="btn btn-primary" target="_blank">Join Octopus Energy and Get £50 Credit!</a>
+</div>
 </body>
 </html>
