@@ -4,7 +4,7 @@ const widget = new ListWidget(); // Initialize a new list widget
 widget.backgroundColor = new Color("#100030"); // Set the background color of the widget
 
 widget.addSpacer(20); // Add space at the top
-const header = widget.addText("Tracker Tarif"); // Add header text
+const header = widget.addText("Tracker Tariff"); // Add header text
 header.font = Font.boldSystemFont(14); // Set the font and size of the header
 header.textColor = Color.white(); // Set the color of the header text
 widget.addSpacer(8); // Add space below the header
