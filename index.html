@@ -260,6 +260,17 @@
 		document.querySelector('.settings-panel').addEventListener('mousemove', resetAutoCloseTimer);
 		document.querySelector('.settings-panel').addEventListener('keypress', resetAutoCloseTimer);
 		
+		document.addEventListener('DOMContentLoaded', function() {
+		  const params = new URLSearchParams(window.location.search);
+		  const region = params.get('region'); // Assuming 'region' is the query parameter
+		  if (region) {
+			const regionPicker = document.getElementById('regionPicker');
+			if (regionPicker) {
+			  regionPicker.value = region;
+			}
+		  }
+		});
+		
 		
 
 				
@@ -403,7 +414,7 @@
             updateData();
 			updateTitleDate(); // Set the current date at load
 			updateCurrentRegion(); // Set the current region at load
-        }, 3600000); // 3600000 milliseconds = 1 hour
+        }, 10000); // 3600000 milliseconds = 1 hour
     };
     </script>
 	<div class="referral-link text-center py-4">
