@@ -295,14 +295,25 @@
 		document.querySelector('.settings-panel').addEventListener('keypress', resetAutoCloseTimer);
 		
 		document.addEventListener('DOMContentLoaded', function() {
-		  const params = new URLSearchParams(window.location.search);
-		  const region = params.get('region'); // Assuming 'region' is the query parameter
-		  if (region) {
+		const params = new URLSearchParams(window.location.search);
+		const regionFromURL = params.get('region'); // Get 'region' parameter from URL
+
+		if (regionFromURL) {
 			const regionPicker = document.getElementById('regionPicker');
-			if (regionPicker) {
-			  regionPicker.value = region;
+			const normalizedRegionFromURL = regionFromURL.toUpperCase(); // Convert URL parameter to uppercase
+
+			// Iterate over dropdown options to find a case-insensitive match
+			for (const option of regionPicker.options) {
+			if (option.value === normalizedRegionFromURL) {
+				option.selected = true;
+				break; // Stop the loop once the matching option is found
 			}
-		  }
+			}
+			
+			// Since the region might have changed, trigger any necessary updates
+			updateData(); // Assuming this function fetches and updates data based on the current region
+			updateCurrentRegion(); // Update displayed region information
+		}
 		});
 		
 		document.addEventListener('DOMContentLoaded', function() {
