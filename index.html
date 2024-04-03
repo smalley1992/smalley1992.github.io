@@ -388,7 +388,7 @@
 
 			// Adjust the URL to use the selected region
 			const baseUrl = `https://api.octopus.energy/v1/products/SILVER-23-12-06/${tariffType}-tariffs/${tariffType[0].toUpperCase()}-1R-SILVER-23-12-06-${selectedRegion}/standard-unit-rates/`;
-			const url = `${baseUrl}?period_from=${date}T00:00:00Z&period_to=${date}T23:59:59Z`;
+			const url = `${baseUrl}?period_from=${date}T00:00:00Z&period_to=${date}T22:59:59Z`;
 			
 			const response = await fetch(url);
 			if (response.ok) {
