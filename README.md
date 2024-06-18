@@ -1,4 +1,8 @@
-A single page website for the Octopus Tracker tariff, ability to choose region and date. Region can be set in the URL with the variable /?region=M - Example: https://octopustracker.small3y.co.uk/?region=M
+A single page website for the Octopus Tracker tariff, ability to choose region, date and tarrif. Region can be set in the URL with the variable /?region=M - Example: https://octopustracker.small3y.co.uk/?region=M&tariff=SILVER-24-04-03
+
+Tariffs:
+SILVER-24-04-03 - April 2024
+SILVER-23-12-06 - November 2023
 
 Regions:
 A – Eastern England
