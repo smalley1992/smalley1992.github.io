@@ -2,6 +2,7 @@ body {
     background-color: #100030;
     color: #E6E6FA;
 }
+
 .container-fluid {
     display: flex;
     justify-content: center;
@@ -9,6 +10,7 @@ body {
     flex-wrap: wrap;
     min-height: 100vh;
 }
+
 .tile {
     background-color: #483D8B;
     border-radius: 10px;
@@ -27,22 +29,32 @@ body {
     min-width: 400px;
     max-height: fit;
 }
+
 .price {
     font-size: 3rem;
     font-weight: bold;
     color: #F8F8FF;
     text-shadow: 2px 2px 4px #000000;
 }
+
 .tomorrow-price {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: bold;
+    text-shadow: 2px 2px 3px #000000; /* Added text shadow for prominence */
 }
+
 .highlight-red {
     color: red;
 }
+
+.highlight-green {
+    color: green;
+}
+
 .settings-panel {
     display: none;
     position: fixed;
@@ -53,6 +65,7 @@ body {
     border-radius: 10px;
     width: 250px;
 }
+
 .btn-close {
     position: absolute;
     top: 0px;
@@ -63,6 +76,7 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
 }
+
 .settings-icon {
     position: fixed;
     top: 20px;
@@ -71,13 +85,12 @@ body {
     cursor: pointer;
     color: #E6E6FA;
 }
+
 .icon {
     font-size: 2rem;
     margin-bottom: 15px;
 }
-.highlight-green {
-    color: green;
-}
+
 .header {
     margin-bottom: 1rem; /* Adjusted margin */
 }
@@ -85,6 +98,7 @@ body {
 .header h1, .header h2 {
     margin-bottom: 0.5rem; /* Reduce the space between title elements */
 }
+
 .referral-link {
     position: fixed;
     left: 0;
@@ -116,6 +130,7 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Enhanced shadow for pop effect */
     text-decoration: none; /* Ensures no underline appears on hover */
 }
+
 .close-btn {
     position: absolute;
     top: 5px;
@@ -126,6 +141,7 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
 }
+
 /* Colorblind-friendly scheme */
 .colorblind {
     background-color: #757575; /* Adjusted background for colorblind mode */
@@ -141,23 +157,26 @@ body {
 }
 
 .colorblind .highlight-red {
-    color: #FFC107; /* Using yellow to indicate increase, better for colorblind users */
+    color: #FFA500; /* Using orange to indicate increase, better for colorblind users */
 }
 
 .colorblind .highlight-green {
     color: #29B6F6; /* Using blue to indicate decrease, better for colorblind users */
 }
+
 @media (max-width: 768px) {
     .close-btn {
         font-size: 1rem; /* Smaller font size for the close button on small screens */
     }
 }
+
 @media (min-width: 768px) {
     .container-fluid {
         justify-content: center;
         align-items: center;
     }
 }
+
 @media (max-width: 768px) {
     .referral-link {
         position: relative; /* Change to relative for small screens */
@@ -172,6 +191,7 @@ body {
         font-size: 0.7rem; /* Even smaller font size for very small screens */
     }
 }
+
 #prevDay {
     cursor: pointer;
     margin-right: 20px; /* Adjust space to the right of the left arrow */
