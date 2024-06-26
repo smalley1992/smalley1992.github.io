@@ -160,7 +160,7 @@ function updateCurrentTariff() {
     let tariffDisplayText = '';
 
     if (selectedTariff === 'SILVER-23-12-06') {
-        tariffDisplayText = 'November 2023 v1';
+        tariffDisplayText = 'December 2023 v1';
     } else if (selectedTariff === 'SILVER-24-04-03') {
         tariffDisplayText = 'April 2024 v1';
     }
