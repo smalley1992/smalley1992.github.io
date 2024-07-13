@@ -30,6 +30,11 @@ function toggleSettingsPanel() {
     }
 }
 
+function closeReferralBar() {
+    const referralLinkBar = document.querySelector('.referral-link');
+    referralLinkBar.style.display = 'none';
+}
+
 document.getElementById('datePicker').addEventListener('change', function() {
     updateData(this.value); // Trigger data update when date changes
     updateTitleDate(this.value); // Also update the title date
@@ -163,6 +168,8 @@ function updateCurrentTariff() {
         tariffDisplayText = 'December 2023 v1';
     } else if (selectedTariff === 'SILVER-24-04-03') {
         tariffDisplayText = 'April 2024 v1';
+    } else if (selectedTariff === 'SILVER-24-07-01') { // New Tariff Added
+        tariffDisplayText = 'July 2024 v1';
     }
 
     document.getElementById('currentTariff').textContent = `Tariff: ${tariffDisplayText}`;
@@ -281,4 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('colorblind');
         toggleButton.textContent = "Switch to Default Mode";
     }
+
+    // Add event listener to the close button for the referral link
+    document.querySelector('.close-btn').addEventListener('click', closeReferralBar);
 });
