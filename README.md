@@ -4,6 +4,8 @@ Tariffs: <br>
 SILVER-24-07-01 - July 2024 <br>
 SILVER-24-04-03 - April 2024 <br>
 SILVER-23-12-06 - December 2023 <br>
+SILVER-24-10-01 - October 2024 <br>
+SILVER-24-12-31 - December 2024 <br>
 
 Regions: <br>
 A – Eastern England <br>
