@@ -168,12 +168,17 @@ function updateCurrentTariff() {
         tariffDisplayText = 'December 2023 v1';
     } else if (selectedTariff === 'SILVER-24-04-03') {
         tariffDisplayText = 'April 2024 v1';
-    } else if (selectedTariff === 'SILVER-24-07-01') { // New Tariff Added
+    } else if (selectedTariff === 'SILVER-24-07-01') {
         tariffDisplayText = 'July 2024 v1';
+    } else if (selectedTariff === 'SILVER-24-10-01') {
+        tariffDisplayText = 'October 2024 v1';
+    } else if (selectedTariff === 'SILVER-24-12-31') {
+        tariffDisplayText = 'December 2024 v1';
     }
 
     document.getElementById('currentTariff').textContent = `Tariff: ${tariffDisplayText}`;
 }
+
 
 async function fetchTariffData(tariffType, date, period) {
     const regionPicker = document.getElementById('regionPicker');
