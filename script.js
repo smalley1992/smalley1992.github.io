@@ -174,6 +174,8 @@ function updateCurrentTariff() {
         tariffDisplayText = 'October 2024 v1';
     } else if (selectedTariff === 'SILVER-24-12-31') {
         tariffDisplayText = 'December 2024 v1';
+    }else if (selectedTariff === 'SILVER-25-04-11') {
+        tariffDisplayText = 'April 2025 v1';
     }
 
     document.getElementById('currentTariff').textContent = `Tariff: ${tariffDisplayText}`;
