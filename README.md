@@ -33,6 +33,7 @@ https://octopustracker.small3y.co.uk/?region=M&tariff=SILVER-24-04-03
 - **SILVER-23-12-06** – December 2023
 - **SILVER-24-10-01** – October 2024
 - **SILVER-24-12-31** – December 2024
+- **SILVER-25-04-11** – April 2025
 
 ---
 
