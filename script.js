@@ -162,24 +162,18 @@ function updateCurrentRegion() {
 function updateCurrentTariff() {
     const tariffPicker = document.getElementById('tariffPicker');
     const selectedTariff = tariffPicker.value;
-    let tariffDisplayText = '';
 
-    if (selectedTariff === 'SILVER-23-12-06') {
-        tariffDisplayText = 'December 2023 v1';
-    } else if (selectedTariff === 'SILVER-24-04-03') {
-        tariffDisplayText = 'April 2024 v1';
-    } else if (selectedTariff === 'SILVER-24-07-01') {
-        tariffDisplayText = 'July 2024 v1';
-    } else if (selectedTariff === 'SILVER-24-10-01') {
-        tariffDisplayText = 'October 2024 v1';
-    } else if (selectedTariff === 'SILVER-24-12-31') {
-        tariffDisplayText = 'December 2024 v1';
-    }else if (selectedTariff === 'SILVER-25-04-11') {
-        tariffDisplayText = 'April 2025 v1';
-    } else if (selectedTariff === 'SILVER-25-04-15') {
-        tariffDisplayText = 'April 2025 v2';
-    }
+    const tariffMap = {
+        'SILVER-23-12-06': 'December 2023 v1',
+        'SILVER-24-04-03': 'April 2024 v1',
+        'SILVER-24-07-01': 'July 2024 v1',
+        'SILVER-24-10-01': 'October 2024 v1',
+        'SILVER-24-12-31': 'December 2024 v1',
+        'SILVER-25-04-11': 'April 2025 v1',
+        'SILVER-25-04-15': 'April 2025 v2'
+    };
 
+    const tariffDisplayText = tariffMap[selectedTariff] || '';
     document.getElementById('currentTariff').textContent = `Tariff: ${tariffDisplayText}`;
 }
 
