@@ -8,27 +8,7 @@ datePicker.setAttribute('max', maxDate); // Set tomorrow as the max date
 
 datePicker.value = today.toISOString().split('T')[0]; // Set today as the default selected date
 
-function toggleSettingsPanel() {
-    const panel = document.querySelector('.settings-panel');
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-}
-
 let autoCloseTimeout = null; // Hold the timeout reference
-
-function toggleSettingsPanel() {
-    const panel = document.querySelector('.settings-panel');
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-
-    // Clear existing timeout to prevent multiple instances
-    clearTimeout(autoCloseTimeout);
-
-    // Set the panel to automatically close after 5 seconds if it's opened
-    if (panel.style.display === 'block') {
-        autoCloseTimeout = setTimeout(() => {
-            panel.style.display = 'none';
-        }, 5000); // 5000 milliseconds = 5 seconds
-    }
-}
 
 function closeReferralBar() {
     const referralLinkBar = document.querySelector('.referral-link');
@@ -65,7 +45,6 @@ document.getElementById('tariffPicker').addEventListener('change', function() {
 document.getElementById('datePicker').addEventListener('change', resetAutoCloseTimer);
 document.getElementById('regionPicker').addEventListener('change', resetAutoCloseTimer);
 document.getElementById('tariffPicker').addEventListener('change', resetAutoCloseTimer);
-document.querySelector('.btn-close').addEventListener('click', resetAutoCloseTimer);
 
 // Additionally, consider other interactions that should reset the timer
 document.querySelector('.settings-panel').addEventListener('mousemove', resetAutoCloseTimer);
@@ -253,10 +232,12 @@ function toggleSettingsPanel() {
     const panel = document.querySelector('.settings-panel');
     const isPanelOpen = panel.style.display === 'block';
 
-    panel.style.display = isPanelOpen ? 'none' : 'block';
-
-    if (!isPanelOpen) { // If we're opening the panel, reset/start the auto-close timer
-        resetAutoCloseTimer();
+    if (isPanelOpen) {
+        panel.style.display = 'none';
+        clearTimeout(autoCloseTimeout); // Stop auto-close when panel is closed
+    } else {
+        panel.style.display = 'block';
+        resetAutoCloseTimer(); // Start auto-close when panel is opened
     }
 }
 
