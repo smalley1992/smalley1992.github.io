@@ -149,7 +149,8 @@ function updateCurrentTariff() {
         'SILVER-24-10-01': 'October 2024 v1',
         'SILVER-24-12-31': 'December 2024 v1',
         'SILVER-25-04-11': 'April 2025 v1',
-        'SILVER-25-04-15': 'April 2025 v2'
+        'SILVER-25-04-15': 'April 2025 v2',
+        'SILVER-25-09-02': 'September 2025 v1'
     };
 
     const tariffDisplayText = tariffMap[selectedTariff] || '';
