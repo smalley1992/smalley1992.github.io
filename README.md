@@ -35,6 +35,9 @@ https://octopustracker.small3y.co.uk/?region=M&tariff=SILVER-24-04-03
 - **SILVER-24-12-31** – December 2024
 - **SILVER-25-04-11** – April 2025
 - **SILVER-25-04-15** – April 2025 V2
+- **SILVER-25-09-02** – September 2025 V1
+
+**Last checked:** 2026-02-01 (Octopus API currently shows September 2025 V1 as the latest Tracker tariff).
 
 ---
 
