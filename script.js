@@ -1,14 +1,14 @@
 const datePicker = document.getElementById('datePicker');
 const today = new Date();
 const tomorrow = new Date(today);
-tomorrow.setDate(tomorrow.getDate() + 1); // Add one day to get tomorrow
+tomorrow.setDate(tomorrow.getDate() + 1);
 
 const maxDate = tomorrow.toISOString().split('T')[0];
-datePicker.setAttribute('max', maxDate); // Set tomorrow as the max date
+datePicker.setAttribute('max', maxDate);
+datePicker.value = today.toISOString().split('T')[0];
 
-datePicker.value = today.toISOString().split('T')[0]; // Set today as the default selected date
-
-let autoCloseTimeout = null; // Hold the timeout reference
+let autoCloseTimeout = null;
+let priceTrendChart = null;
 
 function closeReferralBar() {
     const referralLinkBar = document.querySelector('.referral-link');
@@ -16,114 +16,105 @@ function closeReferralBar() {
 }
 
 document.getElementById('datePicker').addEventListener('change', function() {
-    updateData(this.value); // Trigger data update when date changes
-    updateTitleDate(this.value); // Also update the title date
+    updateData(this.value);
+    updateTitleDate(this.value);
 });
 
 document.getElementById('regionPicker').addEventListener('change', function() {
-    updateCurrentRegion(); // Update displayed region information
+    updateCurrentRegion();
 
     const selectedRegion = this.value;
     const selectedTariff = document.getElementById('tariffPicker').value;
     const newUrl = `${window.location.pathname}?region=${selectedRegion}&tariff=${selectedTariff}`;
-    
-    history.pushState({path:newUrl}, '', newUrl);
-    updateData(); // Assuming this function fetches and updates data based on the selected region
 
+    history.pushState({ path: newUrl }, '', newUrl);
+    updateData(datePicker.value);
 });
 
 document.getElementById('tariffPicker').addEventListener('change', function() {
     const selectedTariff = this.value;
     const currentRegion = document.getElementById('regionPicker').value;
     const newUrl = `${window.location.pathname}?region=${currentRegion}&tariff=${selectedTariff}`;
-    
-    history.pushState({path:newUrl}, '', newUrl);
-    updateData(); // Fetch and update data based on the new tariff
-    updateCurrentTariff(); // Update displayed tariff information
+
+    history.pushState({ path: newUrl }, '', newUrl);
+    updateData(datePicker.value);
+    updateCurrentTariff();
 });
-            
+
 document.getElementById('datePicker').addEventListener('change', resetAutoCloseTimer);
 document.getElementById('regionPicker').addEventListener('change', resetAutoCloseTimer);
 document.getElementById('tariffPicker').addEventListener('change', resetAutoCloseTimer);
 
-// Additionally, consider other interactions that should reset the timer
 document.querySelector('.settings-panel').addEventListener('mousemove', resetAutoCloseTimer);
 document.querySelector('.settings-panel').addEventListener('keypress', resetAutoCloseTimer);
 
 document.addEventListener('DOMContentLoaded', function() {
-const params = new URLSearchParams(window.location.search);
-const regionFromURL = params.get('region'); // Get 'region' parameter from URL
-const tariffFromURL = params.get('tariff'); // Get 'tariff' parameter from URL
+    const params = new URLSearchParams(window.location.search);
+    const regionFromURL = params.get('region');
+    const tariffFromURL = params.get('tariff');
 
-const regionPicker = document.getElementById('regionPicker');
-if (regionFromURL) {
-    const normalizedRegionFromURL = regionFromURL.toUpperCase(); // Convert URL parameter to uppercase
-    for (const option of regionPicker.options) {
-        if (option.value === normalizedRegionFromURL) {
-            option.selected = true;
-            break;
+    const regionPicker = document.getElementById('regionPicker');
+    if (regionFromURL) {
+        const normalizedRegionFromURL = regionFromURL.toUpperCase();
+        for (const option of regionPicker.options) {
+            if (option.value === normalizedRegionFromURL) {
+                option.selected = true;
+                break;
+            }
         }
     }
-}
 
-const tariffPicker = document.getElementById('tariffPicker');
-if (tariffFromURL) {
-    const normalizedTariffFromURL = tariffFromURL.toUpperCase(); // Convert URL parameter to uppercase
-    for (const option of tariffPicker.options) {
-        if (option.value === normalizedTariffFromURL) {
-            option.selected = true;
-            break;
+    const tariffPicker = document.getElementById('tariffPicker');
+    if (tariffFromURL) {
+        const normalizedTariffFromURL = tariffFromURL.toUpperCase();
+        for (const option of tariffPicker.options) {
+            if (option.value === normalizedTariffFromURL) {
+                option.selected = true;
+                break;
+            }
         }
     }
-}
 
-// Trigger data update with the current selection
-updateData();
-updateCurrentRegion();
-updateCurrentTariff(); // Update displayed tariff information
+    updateData(datePicker.value);
+    updateCurrentRegion();
+    updateCurrentTariff();
 });
 
 document.addEventListener('DOMContentLoaded', function() {
     const prevDayButton = document.getElementById('prevDay');
     const nextDayButton = document.getElementById('nextDay');
-    const datePicker = document.getElementById('datePicker');
 
     const adjustDate = (days) => {
-        let currentDate = new Date(datePicker.value);
+        const currentDate = new Date(datePicker.value);
         currentDate.setDate(currentDate.getDate() + days);
 
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1); // Set tomorrow's date
+        const maxSelectableDate = new Date();
+        maxSelectableDate.setDate(maxSelectableDate.getDate() + 1);
 
-        // Ensure the new date is not beyond tomorrow
-        if (currentDate <= tomorrow) {
+        if (currentDate <= maxSelectableDate) {
             datePicker.value = currentDate.toISOString().split('T')[0];
-            
-            updateData(datePicker.value); // Update the dashboard with the new date
-            updateTitleDate(datePicker.value); // Optionally, update the date in the title if you have this function
-        } else {
-            console.log("Cannot select a date beyond tomorrow."); // Optional: Handle attempts to exceed the date limit
+            updateData(datePicker.value);
+            updateTitleDate(datePicker.value);
         }
     };
-    
-    // Event listeners for the arrows
+
     prevDayButton.addEventListener('click', () => adjustDate(-1));
     nextDayButton.addEventListener('click', () => adjustDate(1));
 });
 
 async function updateData(selectedDate) {
     const date = selectedDate ? new Date(selectedDate) : new Date();
-    const tomorrow = new Date(date);
-    tomorrow.setDate(date.getDate() + 1);
+    const tomorrowDateObject = new Date(date);
+    tomorrowDateObject.setDate(date.getDate() + 1);
 
     const todayDate = date.toISOString().split('T')[0];
-    const tomorrowDate = tomorrow.toISOString().split('T')[0];
+    const tomorrowDate = tomorrowDateObject.toISOString().split('T')[0];
 
     await fetchTariffData('gas', todayDate, 'Today');
     await fetchTariffData('electricity', todayDate, 'Today');
     await fetchTariffData('gas', tomorrowDate, 'Tomorrow');
     await fetchTariffData('electricity', tomorrowDate, 'Tomorrow');
+    await updateTrendChart(todayDate);
 }
 
 function updateTitleDate(selectedDate) {
@@ -157,17 +148,13 @@ function updateCurrentTariff() {
     document.getElementById('currentTariff').textContent = `Tariff: ${tariffDisplayText}`;
 }
 
-
 async function fetchTariffData(tariffType, date, period) {
-    const regionPicker = document.getElementById('regionPicker');
-    const tariffPicker = document.getElementById('tariffPicker');
-    const selectedRegion = regionPicker.value; // Get the selected region value
-    const selectedTariff = tariffPicker.value; // Get the selected tariff value
+    const selectedRegion = document.getElementById('regionPicker').value;
+    const selectedTariff = document.getElementById('tariffPicker').value;
 
-    // Adjust the URL to use the selected region and tariff
     const baseUrl = `https://api.octopus.energy/v1/products/${selectedTariff}/${tariffType}-tariffs/${tariffType[0].toUpperCase()}-1R-${selectedTariff}-${selectedRegion}/standard-unit-rates/`;
     const url = `${baseUrl}?period_from=${date}T00:00:00Z&period_to=${date}T22:59:59Z`;
-    
+
     const response = await fetch(url);
     if (response.ok) {
         const data = await response.json();
@@ -181,16 +168,15 @@ function displayPriceAndDate(result, elementId, tariffType, period) {
     const container = document.getElementById(elementId);
     if (period === 'Today') {
         const priceHTML = `<div class='price'>${result.value_inc_vat.toFixed(2)}p</div>`;
-        // Check the tariff type and apply appropriate color
-        let iconColor = tariffType === 'gas' ? 'style="color:orange;"' : 'style="color:YELLOW;"';
-        let iconClass = tariffType === 'gas' ? 'fa-burn' : 'fa-bolt';
+        const iconColor = tariffType === 'gas' ? 'style="color:orange;"' : 'style="color:YELLOW;"';
+        const iconClass = tariffType === 'gas' ? 'fa-burn' : 'fa-bolt';
         container.innerHTML = `<i class="fas ${iconClass} icon" ${iconColor}></i>
                             <div class='title h5'>${tariffType.toUpperCase()} Tariff</div>
                             ${priceHTML}
                             <div class='tomorrow-price' id='tomorrow-${tariffType}'>Loading...</div>`;
     } else if (period === 'Tomorrow') {
         if (!result || result.value_inc_vat === undefined) {
-            document.getElementById(`tomorrow-${tariffType}`).innerHTML = "Tomorrow: Available Soon";
+            document.getElementById(`tomorrow-${tariffType}`).innerHTML = 'Tomorrow: Available Soon';
             return;
         }
 
@@ -199,34 +185,139 @@ function displayPriceAndDate(result, elementId, tariffType, period) {
         const todayPriceElement = todayElement.querySelector('.price');
         const todayPrice = todayPriceElement ? parseFloat(todayPriceElement.textContent.replace('p', '')) : 0;
 
-        let priceClass = '', iconHtml = 'Tomorrow:&nbsp;', percentageChange = 0;
+        let priceClass = '';
+        let iconHtml = 'Tomorrow:&nbsp;';
+        let percentageChange = 0;
         if (tomorrowPrice > todayPrice) {
             priceClass = 'highlight-red';
             percentageChange = ((tomorrowPrice - todayPrice) / todayPrice) * 100;
-            iconHtml += `<i class="fas fa-arrow-up" style="color:red;"></i>&nbsp;`;
+            iconHtml += '<i class="fas fa-arrow-up" style="color:red;"></i>&nbsp;';
         } else if (tomorrowPrice < todayPrice) {
             priceClass = 'highlight-green';
             percentageChange = ((todayPrice - tomorrowPrice) / todayPrice) * 100;
-            iconHtml += `<i class="fas fa-arrow-down" style="color:green;"></i>&nbsp;`;
-        } else {
-            // For equality, no change in price or percentage
+            iconHtml += '<i class="fas fa-arrow-down" style="color:green;"></i>&nbsp;';
         }
 
-        // Removing explicit color style to use the class-based coloring
-        let percentageChangeHtml = percentageChange > 0 ? ` <span class="${priceClass}" style="font-size:0.8rem;">(${percentageChange.toFixed(2)}%)</span>` : '';
+        const percentageChangeHtml = percentageChange > 0 ? ` <span class="${priceClass}" style="font-size:0.8rem;">(${percentageChange.toFixed(2)}%)</span>` : '';
 
         const tomorrowElement = document.getElementById(`tomorrow-${tariffType}`);
         tomorrowElement.innerHTML = `${iconHtml}<span class="${priceClass}">${tomorrowPrice}p</span>&nbsp;${percentageChangeHtml}`;
     }
 }
 
+async function fetchDailyRate(productCode, tariffType, regionCode, date) {
+    const tariffCode = `${tariffType[0].toUpperCase()}-1R-${productCode}-${regionCode}`;
+    const endpoint = `https://api.octopus.energy/v1/products/${productCode}/${tariffType}-tariffs/${tariffCode}/standard-unit-rates/`;
+    const url = `${endpoint}?period_from=${date}T00:00:00Z&period_to=${date}T23:59:59Z`;
+
+    const response = await fetch(url);
+    if (!response.ok) {
+        return null;
+    }
+
+    const data = await response.json();
+    if (!data.results || !data.results.length) {
+        return null;
+    }
+
+    return parseFloat(data.results[0].value_inc_vat.toFixed(2));
+}
+
+async function updateTrendChart(selectedDate) {
+    const statusEl = document.getElementById('chartStatus');
+    const regionCode = document.getElementById('regionPicker').value;
+    const trackerProduct = document.getElementById('tariffPicker').value;
+    const baselineProduct = 'VAR-22-11-01';
+
+    const endDate = new Date(selectedDate);
+    const labels = [];
+    const trackerSeries = [];
+    const baselineSeries = [];
+
+    for (let index = 6; index >= 0; index -= 1) {
+        const pointDate = new Date(endDate);
+        pointDate.setDate(endDate.getDate() - index);
+        const dateString = pointDate.toISOString().split('T')[0];
+
+        labels.push(pointDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
+
+        const [trackerRate, baselineRate] = await Promise.all([
+            fetchDailyRate(trackerProduct, 'electricity', regionCode, dateString),
+            fetchDailyRate(baselineProduct, 'electricity', regionCode, dateString)
+        ]);
+
+        trackerSeries.push(trackerRate);
+        baselineSeries.push(baselineRate);
+    }
+
+    const hasAnyData = trackerSeries.some((value) => value !== null) || baselineSeries.some((value) => value !== null);
+    if (!hasAnyData) {
+        statusEl.textContent = 'Unable to load 7 day trend data for this region/tariff.';
+        return;
+    }
+
+    statusEl.textContent = 'Tracker vs SVR baseline (p/kWh)';
+
+    const ctx = document.getElementById('priceTrendChart').getContext('2d');
+    if (priceTrendChart) {
+        priceTrendChart.destroy();
+    }
+
+    priceTrendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Tracker',
+                    data: trackerSeries,
+                    borderColor: '#4dd0e1',
+                    backgroundColor: 'rgba(77, 208, 225, 0.25)',
+                    tension: 0.3,
+                    spanGaps: true
+                },
+                {
+                    label: 'SVR baseline',
+                    data: baselineSeries,
+                    borderColor: '#ffb74d',
+                    backgroundColor: 'rgba(255, 183, 77, 0.2)',
+                    borderDash: [6, 6],
+                    tension: 0.2,
+                    spanGaps: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#F8F8FF' }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#F8F8FF' },
+                    grid: { color: 'rgba(248,248,255,0.15)' }
+                },
+                y: {
+                    ticks: {
+                        color: '#F8F8FF',
+                        callback: (value) => `${value}p`
+                    },
+                    grid: { color: 'rgba(248,248,255,0.15)' }
+                }
+            }
+        }
+    });
+}
+
 function resetAutoCloseTimer() {
-    clearTimeout(autoCloseTimeout); // Clear existing timer
-    
-    // Set a new timer
+    clearTimeout(autoCloseTimeout);
+
     autoCloseTimeout = setTimeout(() => {
         document.querySelector('.settings-panel').style.display = 'none';
-    }, 5000); // Close after 5 seconds of inactivity
+    }, 5000);
 }
 
 function toggleSettingsPanel() {
@@ -235,45 +326,42 @@ function toggleSettingsPanel() {
 
     if (isPanelOpen) {
         panel.style.display = 'none';
-        clearTimeout(autoCloseTimeout); // Stop auto-close when panel is closed
+        clearTimeout(autoCloseTimeout);
     } else {
         panel.style.display = 'block';
-        resetAutoCloseTimer(); // Start auto-close when panel is opened
+        resetAutoCloseTimer();
     }
 }
 
 window.onload = function() {
-    updateData(); // Initial data load
-    updateTitleDate(); // Set the current date at load
-    updateCurrentRegion(); // Set the current region at load
-    updateCurrentTariff(); // Set the current tariff at load
+    updateData(datePicker.value);
+    updateTitleDate(datePicker.value);
+    updateCurrentRegion();
+    updateCurrentTariff();
 
-    // Set interval for auto-refresh every hour (3600000 milliseconds)
     setInterval(function() {
-        updateData();
-        updateTitleDate(); // Set the current date at load
-        updateCurrentRegion(); // Set the current region at load
-        updateCurrentTariff(); // Update the current tariff at interval
-    }, 3600000); // 3600000 milliseconds = 1 hour
+        updateData(datePicker.value);
+        updateTitleDate(datePicker.value);
+        updateCurrentRegion();
+        updateCurrentTariff();
+    }, 3600000);
 };
 
 document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('colorSchemeToggle');
-    
+
     toggleButton.addEventListener('click', function() {
         document.body.classList.toggle('colorblind');
-        
+
         const isColorblindMode = document.body.classList.contains('colorblind');
         localStorage.setItem('colorScheme', isColorblindMode ? 'colorblind' : 'default');
-        toggleButton.textContent = isColorblindMode ? "Switch to Default Mode" : "Switch to Colorblind Mode";
+        toggleButton.textContent = isColorblindMode ? 'Switch to Default Mode' : 'Switch to Colorblind Mode';
     });
 
-    // Apply saved theme
     if (localStorage.getItem('colorScheme') === 'colorblind') {
         document.body.classList.add('colorblind');
-        toggleButton.textContent = "Switch to Default Mode";
+        toggleButton.textContent = 'Switch to Default Mode';
     }
 
-    // Add event listener to the close button for the referral link
     document.querySelector('.close-btn').addEventListener('click', closeReferralBar);
 });

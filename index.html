@@ -12,9 +12,13 @@
     <!-- Logo and Title -->
     <div class="header text-center">
         <h1 id="dashboardTitle">Octopus Energy Tracker Prices</h1>
-        <i class="fas fa-arrow-left" id="prevDay"></i>
+        <button type="button" id="prevDay" class="day-nav-btn" aria-label="Previous day">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        </button>
         <h2 id="currentDate" style="font-size: 1.25rem; display: inline-block;"></h2>
-        <i class="fas fa-arrow-right" id="nextDay"></i>
+        <button type="button" id="nextDay" class="day-nav-btn" aria-label="Next day">
+            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </button>
         <h2 id="currentRegion" style="font-size: 1.25rem;"></h2>
         <h2 id="currentTariff" style="font-size: 1.25rem;"></h2> <!-- New Element -->
     </div>
@@ -71,7 +75,13 @@
         <div id="electricityTariffData" class="tile">
             <div class="loading">Loading electricity data...</div>
         </div>
+        <div id="priceTrendContainer" class="tile trend-tile">
+            <div class="title h5">Electricity Price Trend (Past 7 Days)</div>
+            <canvas id="priceTrendChart" aria-label="7 day electricity price trend chart" role="img"></canvas>
+            <div id="chartStatus" class="chart-status">Loading trend...</div>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script src="script.js"></script>
     <div class="referral-link text-center py-4">
         <button class="close-btn">&times;</button>

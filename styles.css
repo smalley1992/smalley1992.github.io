@@ -172,12 +172,56 @@ body {
         font-size: 0.7rem; /* Even smaller font size for very small screens */
     }
 }
-#prevDay {
+.day-nav-btn {
+    background: #483D8B;
+    border: 1px solid #E6E6FA;
+    color: #F8F8FF;
+    border-radius: 999px;
+    width: 3rem;
+    height: 3rem;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1.4rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    margin-right: 20px; /* Adjust space to the right of the left arrow */
+    margin: 0 16px;
 }
 
-#nextDay {
-    cursor: pointer;
-    margin-left: 20px; /* Adjust space to the left of the right arrow */
+.day-nav-btn:hover,
+.day-nav-btn:focus-visible {
+    background: #5b4aa8;
+    outline: 2px solid #F8F8FF;
+    outline-offset: 2px;
+}
+
+.trend-tile {
+    max-width: 1240px;
+    min-width: 400px;
+}
+
+#priceTrendChart {
+    width: 100%;
+    min-height: 280px;
+}
+
+.chart-status {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .day-nav-btn {
+        width: 3.25rem;
+        height: 3.25rem;
+        margin: 0 8px;
+        font-size: 1.5rem;
+    }
+
+    .trend-tile {
+        min-width: 300px;
+    }
 }
