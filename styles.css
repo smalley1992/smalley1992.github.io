@@ -202,9 +202,15 @@ body {
     min-width: 400px;
 }
 
-#priceTrendChart {
+.trend-chart-wrapper {
+    position: relative;
     width: 100%;
-    min-height: 280px;
+    height: 280px;
+}
+
+#priceTrendChart {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .chart-status {

@@ -60,7 +60,7 @@
                 <option value="SILVER-24-10-01">October 2024</option>
                 <option value="SILVER-24-12-31">December 2024</option>
                 <option value="SILVER-25-04-11">April 2025 V1</option>
-                <option value="SILVER-25-04-15">April 2025 V2</option>
+                <option value="SILVER-25-04-15" selected>April 2025 V2</option>
                 <option value="SILVER-25-09-02">September 2025 V1</option>
             </select>
         </div>
@@ -77,7 +77,9 @@
         </div>
         <div id="priceTrendContainer" class="tile trend-tile">
             <div class="title h5">Electricity Price Trend (Past 7 Days)</div>
-            <canvas id="priceTrendChart" aria-label="7 day electricity price trend chart" role="img"></canvas>
+            <div class="trend-chart-wrapper">
+                <canvas id="priceTrendChart" aria-label="7 day electricity price trend chart" role="img"></canvas>
+            </div>
             <div id="chartStatus" class="chart-status">Loading trend...</div>
         </div>
     </div>
