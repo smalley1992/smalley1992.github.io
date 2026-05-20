@@ -171,13 +171,15 @@ function getSelectedTariffConfig() {
 function applyBudgetAdjustmentIfEnabled(value, tariffType) {
     const toggle = document.getElementById('budgetAdjustmentToggle');
     const selectedTariff = getSelectedTariffConfig();
-    const shouldAdjust = toggle && toggle.checked && selectedTariff && selectedTariff.code !== 'SILVER-26-04-01';
+    const adjustment = PRE_2026_ADJUSTMENTS[tariffType];
+    const isPre2026Tariff = selectedTariff ? selectedTariff.code !== 'SILVER-26-04-01' : false;
+    const shouldAdjust = Boolean(toggle && toggle.checked && isPre2026Tariff && Number.isFinite(adjustment));
 
     if (!shouldAdjust) {
         return value;
     }
 
-    const adjusted = value - PRE_2026_ADJUSTMENTS[tariffType];
+    const adjusted = value - adjustment;
     return Math.max(adjusted, 0);
 }
 
