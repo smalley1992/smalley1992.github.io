@@ -231,3 +231,8 @@ body {
         min-width: 300px;
     }
 }
+
+.tariff-meta {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
