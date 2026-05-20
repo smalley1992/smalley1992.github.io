@@ -20,7 +20,8 @@
             <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </button>
         <h2 id="currentRegion" style="font-size: 1.25rem;"></h2>
-        <h2 id="currentTariff" style="font-size: 1.25rem;"></h2> <!-- New Element -->
+        <h2 id="currentTariff" style="font-size: 1.25rem;"></h2>
+        <p id="tariffMeta" class="tariff-meta"></p>
     </div>
 
     <div class="settings-icon" onclick="toggleSettingsPanel()">
@@ -54,15 +55,14 @@
         </div>
         <div class="mb-3">
             <label for="tariffPicker" class="form-label">Select Tariff:</label>
-            <select id="tariffPicker" class="form-control">
-                <option value="SILVER-24-04-03">April 2024</option>
-                <option value="SILVER-24-07-01">July 2024</option>
-                <option value="SILVER-24-10-01">October 2024</option>
-                <option value="SILVER-24-12-31">December 2024</option>
-                <option value="SILVER-25-04-11">April 2025 V1</option>
-                <option value="SILVER-25-04-15" selected>April 2025 V2</option>
-                <option value="SILVER-25-09-02">September 2025 V1</option>
-            </select>
+            <select id="tariffPicker" class="form-control"></select>
+        </div>
+        <div class="mb-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="budgetAdjustmentToggle">
+                <label class="form-check-label" for="budgetAdjustmentToggle">Apply pre-April 2026 budget adjustment</label>
+                <small class="form-text text-light d-block">Adjusts displayed prices by -3.5p (electricity) and -0.33p (gas) for pre-2026 customers.</small>
+            </div>
         </div>
         <div class="mb-3">
             <button id="colorSchemeToggle" class="btn btn-secondary">Switch to Colorblind Mode</button>

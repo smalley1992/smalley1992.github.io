@@ -7,6 +7,23 @@ const maxDate = tomorrow.toISOString().split('T')[0];
 datePicker.setAttribute('max', maxDate);
 datePicker.value = today.toISOString().split('T')[0];
 
+const TRACKER_TARIFFS = [
+    { code: 'SILVER-24-04-03', label: 'April 2024 v1', formulaEffectiveFrom: '3 April 2024', sourceBasis: 'Octopus Tracker API product code' },
+    { code: 'SILVER-24-07-01', label: 'July 2024 v1', formulaEffectiveFrom: '1 July 2024', sourceBasis: 'Octopus Tracker API product code' },
+    { code: 'SILVER-24-10-01', label: 'October 2024 v1', formulaEffectiveFrom: '1 October 2024', sourceBasis: 'Octopus Tracker API product code' },
+    { code: 'SILVER-24-12-31', label: 'December 2024 v1', formulaEffectiveFrom: '31 December 2024', sourceBasis: 'Octopus Tracker API product code' },
+    { code: 'SILVER-25-04-11', label: 'April 2025 v1', formulaEffectiveFrom: '11 April 2025', sourceBasis: 'Octopus Tracker API product code' },
+    { code: 'SILVER-25-04-15', label: 'April 2025 v2', formulaEffectiveFrom: '15 April 2025', sourceBasis: 'Octopus Tracker API product code' },
+    { code: 'SILVER-25-09-02', label: 'September 2025 v1', formulaEffectiveFrom: '2 September 2025', sourceBasis: 'Octopus Tracker API product code' },
+    { code: 'SILVER-26-04-01', label: 'April 2026 formula era', formulaEffectiveFrom: '1 April 2026', sourceBasis: 'Tracker FAQ formula era; API product availability may vary' }
+];
+
+const PRE_2026_ADJUSTMENTS = {
+    electricity: 3.5,
+    gas: 0.33
+};
+
+
 let autoCloseTimeout = null;
 let priceTrendChart = null;
 
@@ -65,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const tariffPicker = document.getElementById('tariffPicker');
+    populateTariffPicker();
     if (tariffFromURL) {
         const normalizedTariffFromURL = tariffFromURL.toUpperCase();
         for (const option of tariffPicker.options) {
@@ -129,23 +147,54 @@ function updateCurrentRegion() {
     document.getElementById('currentRegion').textContent = `Region: ${selectedRegion}`;
 }
 
+
+function populateTariffPicker(defaultTariffCode = 'SILVER-25-04-15') {
+    const tariffPicker = document.getElementById('tariffPicker');
+    tariffPicker.innerHTML = '';
+
+    TRACKER_TARIFFS.forEach((tariff) => {
+        const option = document.createElement('option');
+        option.value = tariff.code;
+        option.textContent = tariff.label;
+        if (tariff.code === defaultTariffCode) {
+            option.selected = true;
+        }
+        tariffPicker.appendChild(option);
+    });
+}
+
+function getSelectedTariffConfig() {
+    const selectedTariff = document.getElementById('tariffPicker').value;
+    return TRACKER_TARIFFS.find((tariff) => tariff.code === selectedTariff);
+}
+
+function applyBudgetAdjustmentIfEnabled(value, tariffType) {
+    const toggle = document.getElementById('budgetAdjustmentToggle');
+    const selectedTariff = getSelectedTariffConfig();
+    const adjustment = PRE_2026_ADJUSTMENTS[tariffType];
+    const isPre2026Tariff = selectedTariff ? selectedTariff.code !== 'SILVER-26-04-01' : false;
+    const shouldAdjust = Boolean(toggle && toggle.checked && isPre2026Tariff && Number.isFinite(adjustment));
+
+    if (!shouldAdjust) {
+        return value;
+    }
+
+    const adjusted = value - adjustment;
+    return Math.max(adjusted, 0);
+}
+
 function updateCurrentTariff() {
     const tariffPicker = document.getElementById('tariffPicker');
     const selectedTariff = tariffPicker.value;
 
-    const tariffMap = {
-        'SILVER-23-12-06': 'December 2023 v1',
-        'SILVER-24-04-03': 'April 2024 v1',
-        'SILVER-24-07-01': 'July 2024 v1',
-        'SILVER-24-10-01': 'October 2024 v1',
-        'SILVER-24-12-31': 'December 2024 v1',
-        'SILVER-25-04-11': 'April 2025 v1',
-        'SILVER-25-04-15': 'April 2025 v2',
-        'SILVER-25-09-02': 'September 2025 v1'
-    };
-
-    const tariffDisplayText = tariffMap[selectedTariff] || '';
+    const selectedTariffConfig = TRACKER_TARIFFS.find((tariff) => tariff.code === selectedTariff);
+    const tariffDisplayText = selectedTariffConfig ? selectedTariffConfig.label : '';
     document.getElementById('currentTariff').textContent = `Tariff: ${tariffDisplayText}`;
+
+    const metaElement = document.getElementById('tariffMeta');
+    if (metaElement && selectedTariffConfig) {
+        metaElement.textContent = `Formula effective from ${selectedTariffConfig.formulaEffectiveFrom} · ${selectedTariffConfig.sourceBasis}`;
+    }
 }
 
 async function fetchTariffData(tariffType, date, period) {
@@ -167,7 +216,8 @@ async function fetchTariffData(tariffType, date, period) {
 function displayPriceAndDate(result, elementId, tariffType, period) {
     const container = document.getElementById(elementId);
     if (period === 'Today') {
-        const priceHTML = `<div class='price'>${result.value_inc_vat.toFixed(2)}p</div>`;
+        const adjustedTodayPrice = applyBudgetAdjustmentIfEnabled(result.value_inc_vat, tariffType);
+        const priceHTML = `<div class='price'>${adjustedTodayPrice.toFixed(2)}p</div>`;
         const iconColor = tariffType === 'gas' ? 'style="color:orange;"' : 'style="color:YELLOW;"';
         const iconClass = tariffType === 'gas' ? 'fa-burn' : 'fa-bolt';
         container.innerHTML = `<i class="fas ${iconClass} icon" ${iconColor}></i>
@@ -180,7 +230,7 @@ function displayPriceAndDate(result, elementId, tariffType, period) {
             return;
         }
 
-        const tomorrowPrice = parseFloat(result.value_inc_vat.toFixed(2));
+        const tomorrowPrice = parseFloat(applyBudgetAdjustmentIfEnabled(result.value_inc_vat, tariffType).toFixed(2));
         const todayElement = document.getElementById(`${tariffType}TariffData`);
         const todayPriceElement = todayElement.querySelector('.price');
         const todayPrice = todayPriceElement ? parseFloat(todayPriceElement.textContent.replace('p', '')) : 0;
@@ -362,6 +412,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('colorblind');
         toggleButton.textContent = 'Switch to Default Mode';
     }
+
+    const budgetAdjustmentToggle = document.getElementById('budgetAdjustmentToggle');
+    budgetAdjustmentToggle.addEventListener('change', function() {
+        updateData(datePicker.value);
+        updateCurrentTariff();
+    });
 
     document.querySelector('.close-btn').addEventListener('click', closeReferralBar);
 });
